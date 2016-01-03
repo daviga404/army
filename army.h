@@ -1,6 +1,8 @@
 #ifndef ARMY_H
 #define ARMY_H
 
+#include <stdio.h>
+
 /*
     Definitions
 */
@@ -17,8 +19,8 @@ char *flag_output = DEFAULT_OUTPUT_FILE; // -o [file]
 int flag_listing; // -l
 
 /*
-    Constants
+    Global variables
 */
-const char *input_file;
+FILE *input_file;
 
 #endif /* ARMY_H */

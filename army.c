@@ -11,6 +11,14 @@ int main(int argc, char *argv[])
 {
     parse_args(argc, argv);
 
+    if ((input_file = fopen(argv[argc - 1], "r")) == NULL)
+    {
+        printf("Error: file not found: %s\n", argv[argc - 1]);
+        return EXIT_FAILURE;
+    }
+
+    
+
     return 0;
 }
 
@@ -26,7 +34,7 @@ static void parse_args(int argc, char *argv[])
     if (argc < 2)
     {
         print_usage();
-        exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     }
     else if (!strcmp(argv[1], "-v"))
     {
@@ -65,19 +73,16 @@ static void parse_args(int argc, char *argv[])
             else
             {
                 print_usage();
-                exit(EXIT_SUCCESS);
+                exit(EXIT_FAILURE);
             }
             break;
 
         default:
             printf("Unrecognized flag: %s\n", arg);
             print_usage();
-            exit(EXIT_SUCCESS);
+            exit(EXIT_FAILURE);
         }
     }
-
-    // Set input file (constant defined in army.h)
-    input_file = argv[argc - 1];
 }
 
 /**
