@@ -1,5 +1,5 @@
 BIN=bin
-INPUT=army.c
+INPUT=army.c hashtable.c
 OUTPUT=$(BIN)/army.exe
 CC=gcc
 CCFLAGS=-Wall -c
