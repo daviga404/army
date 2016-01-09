@@ -18,9 +18,4 @@
 char *flag_output = DEFAULT_OUTPUT_FILE; // -o [file]
 int flag_listing; // -l
 
-/*
-    Global variables
-*/
-FILE *input_file;
-
 #endif /* ARMY_H */

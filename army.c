@@ -5,42 +5,45 @@
 #include "army.h"
 
 // Forward declarations
-static void parse_args(int argc, char *argv[]);
+static int parse_args(int argc, char *argv[]);
 static void print_usage();
 
 int main(int argc, char *argv[])
 {
-    parse_args(argc, argv);
+    int fileind = parse_args(argc, argv);
 
-    if ((input_file = fopen(argv[argc - 1], "r")) == NULL)
+    for (int i = fileind; i < argc; i++)
     {
-        printf("Error: file not found: %s\n", argv[argc - 1]);
-        return EXIT_FAILURE;
+        printf("File: %s\n", argv[i]);
     }
-
-    
 
     return 0;
 }
 
 /**
- * Parse a set of command line arguments for the program
+ * Parse a set of command line arguments for the program. Arguments
+ * that do not correspond to options/flags are placed at the
+ * end of argv by getopt_long. The index of the first non-option
+ * (i.e. a filename) argument is returned by this function so that
+ * the filenames can be obtained by the calling function.
  *
  * @param argc Number of args in argv
  * @param argv Program arguments ([0] is the program name)
+ * @return Index of first file argument in argv
  */
-static void parse_args(int argc, char *argv[])
+static int parse_args(int argc, char *argv[])
 {
     static struct option long_options[] = {
         { "listing", no_argument,       0, 'l' },
         { "output",  required_argument, 0, 'o' },
         { "version", no_argument,       0, 'v' },
+        { "help",    no_argument,       0, 'h' },
         { 0, 0, 0, 0 }
     };
 
     int opt;
     int long_index;
-    while (( opt = getopt_long(argc, argv, "lo:v", long_options, &long_index) ) != -1)
+    while (( opt = getopt_long(argc, argv, "lo:vh", long_options, &long_index) ) != -1)
     {
         switch (opt)
         {
@@ -65,6 +68,11 @@ static void parse_args(int argc, char *argv[])
                 exit(EXIT_SUCCESS);
                 break;
 
+            case 'h':
+                print_usage();
+                exit(EXIT_SUCCESS);
+                break;
+
             default:
                 print_usage();
                 exit(EXIT_FAILURE);
@@ -77,7 +85,7 @@ static void parse_args(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     
-    // TODO: something with input files
+    return optind;
 
 }
 
@@ -93,5 +101,6 @@ static void print_usage()
         "  -o,--output [file]       Output the object file to the given file instead.\n"
         "                           Default file to output to is " DEFAULT_OUTPUT_FILE "\n"
         "  -v,--version             Show program version info (must be only flag)\n"
+        "  -h,--help                Show this help message"
     );
 }
