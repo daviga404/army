@@ -1,6 +1,9 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+#include <stdint.h>
+#include <stdbool.h>
+
 /*
     Definitions
 */
@@ -48,9 +51,9 @@ const void *hash_get(struct hashtable *table, const char *key);
  * @param table The table to put an object into
  * @param key The key to assign to the value
  * @param value The value
- * @return A non-zero value if the object was inserted or replaced. Zero otherwise
+ * @return True if the object was inserted or replaced. False otherwise
  */
-int hash_insert(struct hashtable *table, const char *key, const void *value);
+bool hash_insert(struct hashtable *table, const char *key, const void *value);
 
 /**
  * Hashes a string value. This is used in determining the

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdbool.h>
 #include <getopt.h>
 #include "army.h"
 
@@ -48,7 +48,7 @@ static int parse_args(int argc, char *argv[])
         switch (opt)
         {
             case 'l':
-                flag_listing = 1;
+                flag_listing = true;
                 break;
 
             case 'o':

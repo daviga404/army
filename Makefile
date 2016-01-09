@@ -2,7 +2,7 @@ BIN=bin
 INPUT=army.c hashtable.c
 OUTPUT=$(BIN)/army.exe
 CC=gcc
-CCFLAGS=-Wall -c
+CCFLAGS=-Wall -c -std=c99
 LD=gcc
 LDFLAGS=-Wall
 

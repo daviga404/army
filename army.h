@@ -2,6 +2,7 @@
 #define ARMY_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 /*
     Definitions
@@ -16,6 +17,6 @@
     Flags
 */
 char *flag_output = DEFAULT_OUTPUT_FILE; // -o [file]
-int flag_listing; // -l
+bool flag_listing; // -l
 
 #endif /* ARMY_H */

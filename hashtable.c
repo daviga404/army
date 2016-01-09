@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "hashtable.h"
 
 // Forward declarations
@@ -23,8 +24,7 @@ struct hashtable *hash_create(unsigned int buckets)
         return NULL;
 
     // Set all buckets to NULL (empty linked lists)
-    int i;
-    for (i = 0; i < buckets; i++)
+    for (int i = 0; i < buckets; i++)
         (table->buckets)[i] = NULL;
 
     return table;
@@ -46,24 +46,20 @@ int hash_hash(const char *key)
     return hash;
 }
 
-int hash_insert(struct hashtable *table, const char *key, const void *value)
+bool hash_insert(struct hashtable *table, const char *key, const void *value)
 {
-    int index;               // Index of bucket to place value into
-    struct entry *bucket;    // Bucket to place value into
-    struct entry *entry;     // Variable used to traverse linked list
-    struct entry *new_entry; // New entry
-
-    index  = bucket_index(key, table->num_buckets);
-    bucket = table->buckets[index];
+    // Find relevant bucket and keep index (used to find reference to bucket in buckets array)
+    int index            = bucket_index(key, table->num_buckets);
+    struct entry *bucket = table->buckets[index];
 
     // Check the table for an existing entry (bucket is first entry, as it
     // represents the head of the linked list)
-    for (entry = bucket; entry != NULL; entry = entry->next)
+    for (struct entry *entry = bucket; entry != NULL; entry = entry->next)
     {
         if (!strcmp(entry->key, key))
         {
             entry->value = value;
-            return 1;
+            return true;
         }
     }
 
@@ -79,8 +75,10 @@ int hash_insert(struct hashtable *table, const char *key, const void *value)
     }
 
     // Create the new entry to add to the table
+    struct entry *new_entry;
+
     if ((new_entry = (struct entry *)malloc( sizeof(struct entry) )) == NULL)
-        return 0;
+        return false;
 
     new_entry->key = key;
     new_entry->value = value;
@@ -90,7 +88,7 @@ int hash_insert(struct hashtable *table, const char *key, const void *value)
 
     // Increment the number of table entries
     ++table->num_entries;
-    return 1;
+    return true;
 }
 
 void hash_resize(struct hashtable *table, int buckets)
@@ -100,12 +98,11 @@ void hash_resize(struct hashtable *table, int buckets)
         return;
 
     // Set all buckets to NULL (empty linked lists)
-    int i;
-    for (i = 0; i < buckets; i++)
+    for (int i = 0; i < buckets; i++)
         (new_buckets)[i] = NULL;
 
     // Iterate over all existing buckets
-    for (i = 0; i < table->num_buckets; i++)
+    for (int i = 0; i < table->num_buckets; i++)
     {   
         // Iterate over each entry in the existing bucket,
         // rehashing it and adding it to a bucket (or creating
@@ -138,8 +135,7 @@ const void *hash_get(struct hashtable *table, const char *key)
     // If bucket exists, traverse the list
     if (bucket != NULL)
     {
-        struct entry *entry;
-        for (entry = bucket; entry != NULL; entry = entry->next)
+        for (struct entry *entry = bucket; entry != NULL; entry = entry->next)
         {
             // Check to see if entry key matches
             if (!strcmp(entry->key, key))
@@ -159,9 +155,8 @@ const void *hash_delete(struct hashtable *table, const char *key)
     if (!bucket)
         return NULL;
 
-    struct entry *entry;
     struct entry *prev = NULL;
-    for (entry = bucket; entry != NULL; prev = entry, entry = entry->next)
+    for (struct entry *entry = bucket; entry != NULL; prev = entry, entry = entry->next)
     {
         // Find element with same key in bucket
         if (!strcmp(entry->key, key))
